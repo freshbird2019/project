@@ -77,8 +77,10 @@ public class DemoController {
     根据username查询
      */
     @GetMapping(value = "/username/{name}")
-    public List<User> userList(@PathVariable("name")String name){
-        return userRepository.findByUsername(name);
+    public String userList(@PathVariable("name")String name){
+        User user= userRepository.findByUsername(name);
+        if(user==null)return "null";
+        else return "ok";
     }
 }
 

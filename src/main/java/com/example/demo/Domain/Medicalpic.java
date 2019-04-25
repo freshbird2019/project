@@ -18,17 +18,20 @@ public class Medicalpic {
     private int state;
     @Column(name = "flag")
     private int flag;
+    @Column(name="userid")
+    private int userid;
 
     public Medicalpic(){}
 
     public Medicalpic(Integer medicalpicid,String desc,String sizeofmed,
-                      int flag,int state,String local){
+                      int flag,int state,String local,int userid){
         this.medicalpicid=medicalpicid;
         this.desc=desc;
         this.size=sizeofmed;
         this.local=local;
         this.state=state;
         this.flag=flag;
+        this.userid=userid;
     }
 
     public Integer getMedicalpicid() {
@@ -77,5 +80,13 @@ public class Medicalpic {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 }
