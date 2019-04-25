@@ -1,12 +1,11 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Domain.User;
-import com.example.demo.Domain.UserRepository;
+import com.example.demo.Dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.RequestWrapper;
 import java.util.List;
 import java.util.Optional;
 
