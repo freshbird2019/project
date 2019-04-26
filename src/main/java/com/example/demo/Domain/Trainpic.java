@@ -1,6 +1,7 @@
 package com.example.demo.Domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "trainpic")
@@ -12,6 +13,9 @@ public class Trainpic {
     private String size;
     @Column(name = "local")
     private String local;
+
+    @OneToMany(mappedBy = "trainpic",fetch = FetchType.LAZY)
+    private List<UserTrainpic> userTrainpicList;
 
     public Trainpic() {
     }
@@ -44,5 +48,13 @@ public class Trainpic {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public List<UserTrainpic> getUserTrainpicList() {
+        return userTrainpicList;
+    }
+
+    public void setUserTrainpicList(List<UserTrainpic> userTrainpicList) {
+        this.userTrainpicList = userTrainpicList;
     }
 }

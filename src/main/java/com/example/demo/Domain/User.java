@@ -1,6 +1,9 @@
 package com.example.demo.Domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="user")
@@ -22,6 +25,12 @@ public class User {
     private  String address;
     @Column(name = "hospital")
     private  String hospital;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Medicalpic> medicalpicsList;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<UserTrainpic> userTrainpicList;
 
     public User(){
 
@@ -101,5 +110,21 @@ public class User {
 
     public String getHospital() {
         return hospital;
+    }
+
+    public List<Medicalpic> getMedicalpicsList() {
+        return medicalpicsList;
+    }
+
+    public void setMedicalpicsList(List<Medicalpic> medicalpicsList) {
+        this.medicalpicsList = medicalpicsList;
+    }
+
+    public void setUserTrainpicList(List<UserTrainpic> userTrainpicList) {
+        this.userTrainpicList = userTrainpicList;
+    }
+
+    public List<UserTrainpic> getUserTrainpicList() {
+        return userTrainpicList;
     }
 }

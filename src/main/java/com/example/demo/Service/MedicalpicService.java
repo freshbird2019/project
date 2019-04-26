@@ -3,15 +3,18 @@ package com.example.demo.Service;
 import com.example.demo.Dao.MedicalpicRepository;
 import com.example.demo.Domain.Medicalpic;
 import com.example.demo.Domain.Trainpic;
+import com.example.demo.Domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MedicalpicService {
     @Autowired
     private MedicalpicRepository medicalpicRepository;
+    @Autowired
     private TrainpicService trainpicService;
 
     /*
@@ -41,5 +44,12 @@ public class MedicalpicService {
      */
     public Optional<Medicalpic> findMedicalById(Integer id){
         return medicalpicRepository.findById(id);
+    }
+
+    /*
+    用户获取自己的上传记录
+     */
+    public List<Medicalpic> findMyMedicalpic(User user){
+        return medicalpicRepository.findMedicalpicByUserOrderByUploadtimeDesc(user);
     }
 }

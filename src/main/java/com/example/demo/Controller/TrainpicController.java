@@ -2,6 +2,9 @@ package com.example.demo.Controller;
 
 import com.example.demo.Dao.TrainpicRepository;
 import com.example.demo.Domain.Trainpic;
+import com.example.demo.Domain.User;
+import com.example.demo.Domain.UserTrainpic;
+import com.example.demo.Service.TrainService;
 import com.example.demo.Service.TrainpicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -66,8 +69,8 @@ public class TrainpicController {
     插入一个图片
      */
     @PutMapping(value = "/AddaTrainpic")
-    public Trainpic AddaTrainpic( @RequestParam("name") String local,
-                                  @RequestParam("pwd") String size)
+    public Trainpic AddaTrainpic( @RequestParam("local") String local,
+                                  @RequestParam("size") String size)
     {
         return trainpicService.addAPic(size,local);
     }
@@ -75,8 +78,9 @@ public class TrainpicController {
     /*
     删除一个图片
      */
-    @GetMapping(value = "DelaTrainpic/{id}")
+    @GetMapping(value = "/DelaTrainpic/{id}")
     public void DelaTrainpic(@PathVariable("id") Integer id){
         trainpicService.deleteAPicByid(id);
     }
+
 }

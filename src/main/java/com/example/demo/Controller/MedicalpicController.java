@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class MedicalpicController {
     @Autowired
     private MedicalpicService medicalpicService;
+    @Autowired
     private UserService userService;
 
     /*
@@ -26,12 +29,32 @@ public class MedicalpicController {
                                  @PathVariable(value = "name") String name){
         medicalpic.setState(0);
         User user=userService.findUserByName(name);
-        medicalpic.setMedicalpicid(user.getUserid());
+        medicalpic.setUser(user);//设置上传者
+        Timestamp time=new Timestamp(System.currentTimeMillis());
+        medicalpic.setUploadtime(time);//设置上传时间
         return medicalpicService.addOrUpdateApic(medicalpic);
     }
+    /*
+    上传test
+     */
+ /*   @GetMapping(value = "/testAddaMedicalpic/{name}")
+    public Medicalpic testAddMedical(@PathVariable(value = "name") String name){
+        Medicalpic medicalpic=new Medicalpic();
+        medicalpic.setDesc("hello");
+        medicalpic.setSize("123");
+        medicalpic.setState(0);
+        medicalpic.setFlag(0);
+        medicalpic.setLocal("abcdefg");
+        User user=userService.findUserByName(name);
+        medicalpic.setUser(user);//设置上传者
+        Timestamp time=new Timestamp(System.currentTimeMillis());
+        medicalpic.setUploadtime(time);//设置上传时间
+        return medicalpicService.addOrUpdateApic(medicalpic);
+    }*/
 
     /*
-    图片处理成功后，state=1
+    图片处理成功后，state=1,
+    这边要加入处理过程
      */
     @PutMapping(value = "/SuccessMedicalpic")
     public Medicalpic UpdateMedical(@RequestBody Medicalpic medicalpic){
@@ -45,15 +68,16 @@ public class MedicalpicController {
     /*
     将图片提供给训练图像
      */
+    @GetMapping(value = "/MedicalToTrain/{id}")
     public void MedicalToTrain(@PathVariable(value = "id")Integer id){
-        //Medicalpic medicalpic=(Medicalpic)GetMpic(id);
-
+        Medicalpic medicalpic=medicalpicService.findMedicalById(id).get();
+        medicalpicService.MedicalToTrain(medicalpic);
     }
 
     /*
     根据id获取图片
      */
-    @PutMapping(value = "/GetMedicalpicByid/{id}")
+    @GetMapping(value = "/GetMedicalpicByid/{id}")
     public Optional<Medicalpic> GetMpic(@PathVariable(value = "id")Integer id){
         return medicalpicService.findMedicalById(id);
     }
@@ -65,4 +89,13 @@ public class MedicalpicController {
         medicalpicService.deleteAPicByid(id);
     }
 
+    /*
+    获取自己的上传医学图像记录
+     */
+    @GetMapping(value = "/GetMyMedical/{name}")
+    public List<Medicalpic> getMyTrain(@PathVariable("name") String name){
+        User user=userService.findUserByName(name);
+
+        return medicalpicService.findMyMedicalpic(user);
+    }
 }
