@@ -35,7 +35,8 @@ public class UserService {
     //登录
     public int userLogin(String name, String pwd) {
         int flag = 0;
-        User user = new User();
+        User user;
+        System.out.println(name+"  "+pwd);
         user = findUserByName(name);
         if (user == null) flag = 1;//用户名不存在
         else {

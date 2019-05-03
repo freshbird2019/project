@@ -26,6 +26,7 @@ public class UserController {
     注册
      */
     @PostMapping(value = "/UserRegister")
+    @ResponseBody
     public User userRegister( @RequestBody User user){
         return userService.userRegister(user);
     }
@@ -33,9 +34,10 @@ public class UserController {
     /*
     登录,返回值为1是用户名不存在，2为密码错误
      */
-    @GetMapping(value = "/UserLogin")
-    public int userLogin( @RequestParam("name") String username,
-                              @RequestParam("pwd") String password){
+    @PostMapping(value = "/UserLogin")
+    @ResponseBody
+    public int userLogin( @RequestParam(value = "name",required = false) String username,
+                              @RequestParam(value = "pw",required = false) String password){
         return userService.userLogin(username,password);
     }
 

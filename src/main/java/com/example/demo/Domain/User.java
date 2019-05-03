@@ -21,6 +21,8 @@ public class User {
     private  String phone;
     @Column(name = "sex")
     private  String sex;
+    @Column(name = "age")
+    private int age;
     @Column(name = "address")
     private  String address;
     @Column(name = "hospital")
@@ -94,6 +96,14 @@ public class User {
 
     public String getSex() {
         return sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getAddress() {
