@@ -1,6 +1,7 @@
 package com.example.demo.Domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 @Table(name="user")
 public class User {
     @Id
+    @Column(name = "userid",nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userid;
     @Column(name="username")
@@ -28,9 +30,11 @@ public class User {
     @Column(name = "hospital")
     private  String hospital;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Medicalpic> medicalpicsList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<UserTrainpic> userTrainpicList;
 
@@ -39,7 +43,7 @@ public class User {
     }
 
     public User(Integer id,String username,String pwd,String email,String phone,
-                String sex,String address,String hospital){
+                String sex,String address,String hospital,int age){
         this.userid=id;
         this.username=username;
         this.pwd=pwd;
@@ -48,6 +52,7 @@ public class User {
         this.sex=sex;
         this.address=address;
         this.hospital=hospital;
+        this.age=age;
     }
 
     public int getUserid() {

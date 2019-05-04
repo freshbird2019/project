@@ -14,7 +14,11 @@ public class UserService {
 
     //注册
     public User userRegister(User user) {
-        return userRepository.save(user);
+        System.out.println("ok");
+        User user1=userRepository.save(user);
+        userRepository.flush();
+        System.out.println(user1.getUserid());
+        return user1;
     }
 
     //更改用户信息

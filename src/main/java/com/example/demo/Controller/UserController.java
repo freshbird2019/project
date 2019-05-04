@@ -25,16 +25,18 @@ public class UserController {
     /*
     注册
      */
-    @PostMapping(value = "/UserRegister")
     @ResponseBody
-    public User userRegister( @RequestBody User user){
+    @RequestMapping(value = "/UserRegister")
+    public User Xyregister(@RequestBody User user) {
+        System.out.println(user.getUsername());
+        user.setUserid(0);
         return userService.userRegister(user);
     }
 
     /*
     登录,返回值为1是用户名不存在，2为密码错误
      */
-    @PostMapping(value = "/UserLogin")
+    @RequestMapping(value = "/UserLogin")
     @ResponseBody
     public int userLogin( @RequestParam(value = "name",required = false) String username,
                               @RequestParam(value = "pw",required = false) String password){
@@ -44,9 +46,12 @@ public class UserController {
     /*
     根据用户名获取用户id
      */
-    @GetMapping(value = "/getUseridByname/{name}")
+    @RequestMapping(value = "/getUseridByname/{name}")
+    @ResponseBody
     public int getUserIdByname(@PathVariable("name") String username){
+
         User user=userService.findUserByName(username);
+        System.out.println(user);
         return user.getUserid();
     }
 
@@ -54,14 +59,17 @@ public class UserController {
     修改用户信息
      */
     @PutMapping(value = "/updateUserInfo/{id}")
+    @ResponseBody
     public User updateUser(@PathVariable("id") Integer id,
                            @RequestParam("name") String username,
                            @RequestParam("pwd") String password,
                            @RequestParam("email") String email,
                            @RequestParam("phone") String phone,
-                           @RequestParam("sex") String sex,
-                           @RequestParam("address") String address,
-                           @RequestParam("hospital") String hospital){
+                           @RequestParam(value = "sex",required = false) String sex,
+                           @RequestParam(value = "address",required = false) String address,
+                           @RequestParam(value = "hospital",required = false) String hospital,
+                           @RequestParam("age")Integer age
+                           ){
         User user=new User();
         user.setUserid(id);
         user.setUsername(username);
@@ -71,6 +79,7 @@ public class UserController {
         user.setAddress(address);
         user.setSex(sex);
         user.setHospital(hospital);
+        user.setAge(age);
         return userService.userUpdate(user);
     }
 
@@ -78,6 +87,7 @@ public class UserController {
     根据name获取user
      */
     @GetMapping(value = "/UserByname/{name}")
+    @ResponseBody
     public User findUserByname(@PathVariable("name")String name){
         User user= userService.findUserByName(name);
         return user;
