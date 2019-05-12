@@ -2,6 +2,11 @@ package com.example.demo.Controller;
 
 import com.alibaba.fastjson.JSON;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 
 import org.slf4j.LoggerFactory;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import org.apache.http.*;
 
 
 import java.io.IOException;
@@ -90,6 +96,9 @@ public class UploadController {
 
             logger.debug("文件写入成功...");
 
+            // 如果文件上传成功则唤起调用python接口
+
+
             return "文件上传成功";
 
         } catch (IOException e) {
@@ -99,6 +108,50 @@ public class UploadController {
             return "后端异常...";
 
         }
+
+    }
+
+
+    //TODO 暂未测试功能正确性
+    public String processImg(String filepath, String filename) {
+        // filepath是图片存放的绝对地址
+        // filename是图片的名字
+        // 最后的处理结果会放在图片同一目录下，名字相同，但是文件格式不一样所以没关系
+
+        // python程序的接口地址
+        String url = "http://localhost:8808/segment?"+"name=filename&"+"loca=filepath";
+
+        // 获取httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        //生成post请求
+        HttpPost httpPost = new HttpPost(url);
+        CloseableHttpResponse response = null;
+
+        try {
+
+            //执行请求
+            response = httpClient.execute(httpPost);
+
+        }catch(IOException e ) {
+            e.printStackTrace();
+        }
+
+        HttpEntity entity = response.getEntity();
+        String result = null;
+
+        try {
+
+            result = EntityUtils.toString(entity);
+        }catch(ParseException | IOException e) {
+
+            e.printStackTrace();
+        }
+
+        return result;
+
+
+
 
     }
 

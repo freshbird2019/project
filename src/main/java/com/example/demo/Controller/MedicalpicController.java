@@ -4,10 +4,15 @@ import com.example.demo.Domain.Medicalpic;
 import com.example.demo.Domain.User;
 import com.example.demo.Service.MedicalpicService;
 import com.example.demo.Service.UserService;
+import com.example.demo.Controller.FileUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -97,5 +102,32 @@ public class MedicalpicController {
         User user=userService.findUserByName(name);
 
         return medicalpicService.findMyMedicalpic(user);
+    }
+
+
+    @GetMapping(value = "/UploadFile/{file}")
+    public boolean uploadFile(@PathVariable("file") MultipartFile file) {
+        if(!file.isEmpty()) {
+            //获取文件名
+            String filename = file.getOriginalFilename();
+
+            // 将文件存放在/resources/static文件夹下
+            String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
+
+            try {
+                // 写入文件
+                FileUtil.fileupload(file.getBytes(), path, filename);
+
+                System.out.println("正在将文件  "+ filename + "  写入： " + path);
+
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // TODO 接下来，可以将路径存到数据库中
+
+            return true;
+        }
+        return false;
     }
 }
