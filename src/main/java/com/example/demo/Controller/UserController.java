@@ -58,10 +58,10 @@ public class UserController {
     /*
     修改用户信息
      */
-    @PutMapping(value = "/updateUserInfo/{id}")
+    @RequestMapping(value = "/updateUserInfo")
     @ResponseBody
     public User updateUser(@PathVariable("id") Integer id,
-                           @RequestParam("name") String username,
+                           @RequestParam("username") String username,
                            @RequestParam("pwd") String password,
                            @RequestParam("email") String email,
                            @RequestParam("phone") String phone,
@@ -84,12 +84,21 @@ public class UserController {
     }
 
     /*
-    根据name获取user
+    修改用户信息
      */
-    @GetMapping(value = "/UserByname/{name}")
+    @RequestMapping(value = "/updateUserInfoo")
     @ResponseBody
-    public User findUserByname(@PathVariable("name")String name){
-        User user= userService.findUserByName(name);
+    public User updateUser2(@RequestBody User user){
+        return userService.userUpdate(user);
+    }
+
+    /*
+    根据id获取user
+     */
+    @GetMapping(value = "/UserById/{id}")
+    @ResponseBody
+    public User findUserByname(@PathVariable("id")int id){
+        User user= userService.findUserById(id);
         return user;
     }
 }

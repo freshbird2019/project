@@ -38,7 +38,7 @@ public class UserTrainpic implements Serializable {
         this.trainid = trainid;
     }
 
-    @JsonBackReference
+   // @JsonBackReference
     public void setUser(User user) {
         this.user = user;
     }
@@ -47,7 +47,7 @@ public class UserTrainpic implements Serializable {
         return user;
     }
 
-    @JsonBackReference
+    //@JsonBackReference
     public void setTrainpic(Trainpic trainpic) {
         this.trainpic = trainpic;
     }

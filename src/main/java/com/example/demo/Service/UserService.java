@@ -36,6 +36,9 @@ public class UserService {
         return userRepository.findByUsername(name);
     }
 
+    //根据id获取user
+    public User findUserById(int id){return userRepository.findByUserid(id);}
+
     //登录
     public int userLogin(String name, String pwd) {
         int flag = 0;

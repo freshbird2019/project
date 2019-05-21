@@ -34,9 +34,16 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Medicalpic> medicalpicsList;
 
-    @JsonIgnore
+   @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<UserTrainpic> userTrainpicList;
+/*
+   @ManyToMany(cascade = CascadeType.ALL)
+   @JoinTable(name = "train",joinColumns = {
+           @JoinColumn(name = "userid",referencedColumnName = "userid")},inverseJoinColumns = {
+            @JoinColumn(name = "trainpicid",referencedColumnName = "trainpicid")
+   })
+   private List<UserTrainpic> userTrainpicList;*/
 
     public User(){
 
@@ -135,6 +142,7 @@ public class User {
         this.medicalpicsList = medicalpicsList;
     }
 
+    @JsonBackReference
     public void setUserTrainpicList(List<UserTrainpic> userTrainpicList) {
         this.userTrainpicList = userTrainpicList;
     }

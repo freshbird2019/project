@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TrainpicService {
@@ -60,5 +61,10 @@ public class TrainpicService {
     //随机抽取一个训练图像
     public Trainpic findOne(Integer id){
         return trainpicRepository.findRandnotrainedpic(id);
+    }
+
+    //根据图片id获取图片
+    public Optional<Trainpic> findById(Integer id){
+        return trainpicRepository.findById(id);
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 @RestController
 @EnableAutoConfiguration
@@ -82,5 +84,6 @@ public class TrainpicController {
     public void DelaTrainpic(@PathVariable("id") Integer id){
         trainpicService.deleteAPicByid(id);
     }
+
 
 }

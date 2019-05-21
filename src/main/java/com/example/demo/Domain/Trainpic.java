@@ -1,5 +1,7 @@
 package com.example.demo.Domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -54,6 +56,7 @@ public class Trainpic {
         return userTrainpicList;
     }
 
+    @JsonBackReference
     public void setUserTrainpicList(List<UserTrainpic> userTrainpicList) {
         this.userTrainpicList = userTrainpicList;
     }
