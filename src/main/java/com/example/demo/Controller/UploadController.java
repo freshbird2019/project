@@ -96,7 +96,16 @@ public class UploadController {
             // return "后端异常...";
         }
 
-        // TODO 需要将处理的结果存入数据库并和上传者联系起来
+        /* TODO 需要将处理的结果存入数据库并和上传者联系起来
+        * 对singlefile方法还需要添加用户id的参数
+        * 上传图片对应的类是meidicalpic
+        * local 对应 imgLoca+filename
+        * description可以存放图片的名字（filename）这里需要利用正则表达式去掉文件名的后缀
+        * 因为在以后读取图片的操作时，需要根据图片名字取出相应数据
+        * userid对应上传人的id
+        * 其他的可填可不填
+        * 还需要实现用户获取处理过的图片的方法
+        */
         String imgLoca = path;
         String apiUrl = "http://localhost:8808/segment";
         System.out.println("正在处理...");
