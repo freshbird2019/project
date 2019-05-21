@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.http.*;
 
 
-import java.io.IOException;
+import java.io.*;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 
 import java.nio.file.Path;
@@ -65,94 +68,98 @@ public class UploadController {
     public Object singleFileUpload(MultipartFile file) {
        // logger.debug("传入的文件参数：{}", JSON.toJSONString(file, true));
 
+
         if (Objects.isNull(file) || file.isEmpty()) {
-
             logger.error("文件为空");
-
             return "文件为空，请重新上传";
-
         }
 
+        //获取文件名
+        String filename = file.getOriginalFilename();
 
-
+        // 将文件存放在/resources/static文件夹下
+        String path = "";
         try {
-
+            path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
 
             byte[] bytes = file.getBytes();
 
-            Path path = Paths.get(UPLOAD_FOLDER + file.getOriginalFilename());
+            // 写入文件
+            FileUtil.fileupload(file.getBytes(), path, filename);
 
-            //如果没有files文件夹，则创建
+            System.out.println("正在将文件  "+ filename + "  写入： " + path);
 
-            if (!Files.isWritable(path)) {
-
-                Files.createDirectories(Paths.get(UPLOAD_FOLDER));
-
-            }
-
-            //文件写入指定路径
-
-            Files.write(path, bytes);
-
-            logger.debug("文件写入成功...");
-
-            // 如果文件上传成功则唤起调用python接口
-
-
-            return "文件上传成功";
+            // return "文件上传成功";
 
         } catch (IOException e) {
-
             e.printStackTrace();
-
-            return "后端异常...";
-
+            // return "后端异常...";
         }
 
+        // TODO 需要将处理的结果存入数据库并和上传者联系起来
+        String imgLoca = path;
+        String apiUrl = "http://localhost:8808/segment";
+        System.out.println("正在处理...");
+        String res = sendRequest(apiUrl, imgLoca, filename);
+        System.out.println(res);
+
+
+        return "success";
     }
 
+    public String sendRequest(String imgurl, String imgLoca, String name) {
+        URL url;
+        HttpURLConnection connection = null;
+        String urlParameters =
+                "name=" + name + "&loca=" + imgLoca;
 
-    //TODO 暂未测试功能正确性
-    public String processImg(String filepath, String filename) {
-        // filepath是图片存放的绝对地址
-        // filename是图片的名字
-        // 最后的处理结果会放在图片同一目录下，名字相同，但是文件格式不一样所以没关系
+        System.out.println("正在访问url： "+imgurl+" 参数是： "+ urlParameters);
 
-        // python程序的接口地址
-        String url = "http://localhost:8808/segment?"+"name=filename&"+"loca=filepath";
+        try{
+            //create connection
+            url = new URL(imgurl);
+            connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded");
 
-        // 获取httpclient对象
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+            connection.setRequestProperty("Content-Length", "" +
+                    Integer.toString(urlParameters.getBytes().length));
 
-        //生成post请求
-        HttpPost httpPost = new HttpPost(url);
-        CloseableHttpResponse response = null;
+            connection.setRequestProperty("Content-Language", "en-US");
 
-        try {
+            connection.setUseCaches (false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
 
-            //执行请求
-            response = httpClient.execute(httpPost);
+            //Send request
+            DataOutputStream wr = new DataOutputStream (
+                    connection.getOutputStream ());
+            wr.writeBytes (urlParameters);
+            wr.flush ();
+            wr.close ();
 
-        }catch(IOException e ) {
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+
+            return response.toString();
+
+        }catch(Exception e) {
             e.printStackTrace();
+        }finally {
+            if(connection != null ) {
+                connection.disconnect();
+            }
         }
-
-        HttpEntity entity = response.getEntity();
-        String result = null;
-
-        try {
-
-            result = EntityUtils.toString(entity);
-        }catch(ParseException | IOException e) {
-
-            e.printStackTrace();
-        }
-
-        return result;
-
-
-
-
+        return "false";
     }
 
 }
