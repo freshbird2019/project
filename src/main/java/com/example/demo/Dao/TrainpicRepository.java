@@ -9,8 +9,8 @@ import java.util.List;
 public interface TrainpicRepository extends JpaRepository<Trainpic,Integer> {
 
     //找到该用户已训练后的图片
-     @Query(nativeQuery =true,value = "select * from train,trainpic t,user where train.userid=user.userid " +
-            "and train.trainpicid=t.trainpicid and train.userid=:id")
+     @Query(nativeQuery =true,value = "select t.*,count(distinct t.trainpicid) from train,trainpic t,user where train.userid=user.userid " +
+            "and train.trainpicid=t.trainpicid and train.userid=:id  group by t.trainpicid")
     List<Trainpic> findtrainedpic(Integer id);
 
     //找到该用户未训练的图片
