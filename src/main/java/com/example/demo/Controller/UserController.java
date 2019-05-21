@@ -34,7 +34,7 @@ public class UserController {
     }
 
     /*
-    登录,返回值为1是用户名不存在，2为密码错误
+    登录,返回值为0是用户名不存在，-1为密码错误
      */
     @RequestMapping(value = "/UserLogin")
     @ResponseBody

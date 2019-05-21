@@ -42,10 +42,11 @@ public class UserService {
         User user;
         System.out.println(name+"  "+pwd);
         user = findUserByName(name);
-        if (user == null) flag = 1;//用户名不存在
+        if (user == null) flag = 0;//用户名不存在
         else {
             user = userRepository.findByUsernameAndPwd(name, pwd);
-            if (user == null) flag = 2;//密码错误
+            if (user == null) flag = -1;//密码错误
+            else flag=user.getUserid();
         }
         return flag;
     }

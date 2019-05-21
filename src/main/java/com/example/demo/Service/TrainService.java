@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,14 +27,15 @@ public class TrainService {
     增加一条训练记录
      */
     @Transactional
-    public UserTrainpic addATrain(){
-        User user=userRepository.findById(1).get();
-        Trainpic trainpic=trainpicRepository.findById(1).get();
+    public UserTrainpic addATrain(int userid,int trainpicid,double a){
+        System.out.println(a+"okkkkkkkkkkk");
+        User user=userRepository.findById(userid).get();
+        Trainpic trainpic=trainpicRepository.findById(trainpicid).get();
         Timestamp time=new Timestamp(System.currentTimeMillis());
         UserTrainpic userTrainpic=new UserTrainpic();
         userTrainpic.setUser(user);
         userTrainpic.setTrainpic(trainpic);
-        userTrainpic.setAccuracy(0.2);
+        userTrainpic.setAccuracy(a);
         userTrainpic.setTraintime(time);
         userTrainpic.setUsersign("abcd");
         return trainRepository.save(userTrainpic);
@@ -52,4 +54,9 @@ public class TrainService {
     public void DeleteATrain(Integer id){
         trainRepository.deleteById(id);
     }
+
+    /*
+    日期
+     */
+    public List<String> findTrainDate(Integer id){return trainRepository.findtraindate(id);}
 }
